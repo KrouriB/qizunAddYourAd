@@ -10,7 +10,7 @@
         "ext-intl": "*",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.10",
-        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.16",
         "easycorp/easyadmin-bundle": "^4.7",
         "gedmo/doctrine-extensions": "^3.11",

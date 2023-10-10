@@ -40,6 +40,9 @@ class AddUserCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
+        $nameQuestion = new Question('Enter name: ');
+        $name = $helper->ask($input, $output, $nameQuestion);
+
         $emailQuestion = new Question('Enter email: ');
         $email = $helper->ask($input, $output, $emailQuestion);
 
@@ -50,6 +53,7 @@ class AddUserCommand extends Command
 
         // Create and persist the user
         $user = new User();
+        $user->setUsername($name);
         $user->setEmail($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
