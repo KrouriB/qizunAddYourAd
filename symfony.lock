@@ -62,6 +62,18 @@
     "knplabs/knp-time-bundle": {
         "version": "v1.20.0"
     },
+    "nelmio/cors-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "6bea22e6c564fba3a1391615cada1437d0bde39c"
+        },
+        "files": [
+            "./config/packages/nelmio_cors.yaml"
+        ]
+    },
     "nyholm/psr7": {
         "version": "1.5",
         "recipe": {
@@ -347,6 +359,9 @@
             "config/routes/ux_autocomplete.yaml"
         ]
     },
+    "symfony/ux-chartjs": {
+        "version": "v2.12.0"
+    },
     "symfony/ux-react": {
         "version": "2.10",
         "recipe": {
@@ -441,5 +456,17 @@
     },
     "twig/extra-bundle": {
         "version": "v3.4.0"
+    },
+    "vich/uploader-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.13",
+            "ref": "1b3064c2f6b255c2bc2f56461aaeb76b11e07e36"
+        },
+        "files": [
+            "./config/packages/vich_uploader.yaml"
+        ]
     }
 }
