@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="h-full bg-gray-100" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} | {{ application_name }}</title>
+    <link rel="icon"
+          href="{{ asset('build/images/favicon.png') }}">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="h-full overflow-hidden">
+
+
+<!--
+This example requires some changes to your config:
+
+```
+// tailwind.config.js
+module.exports = {
+// ...
+plugins: [
+  // ...
+  require('@tailwindcss/forms'),
+],
+}
+```
+-->
+<!--
+  This example requires updating your template:
+
+  ```
+  <html class="h-full bg-gray-50">
+  <body class="h-full overflow-hidden">
+  ```
+-->
+<div class="flex h-full" {{ stimulus_controller('mobilemenu') }}>
+
+    {% include 'partials/menu-mobile.html.twig' %}
+    {% include 'partials/menu-large.html.twig' %}
+
+    <!-- Content area -->
+    <div class="flex flex-1 flex-col overflow-hidden">
+        <header class="w-full">
+            <div class="relative z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
+                <button type="button"
+                        class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden" {{ stimulus_action('mobilemenu' , 'open') }}>
+                    <span class="sr-only">Ouvrir le menu</span>
+                    <!-- Heroicon name: outline/bars-3-bottom-left -->
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/>
+                    </svg>
+                </button>
+                <div class="flex flex-1 justify-between px-4 sm:px-6">
+
+                    {% include 'partials/searchbar.html.twig' %}
+
+                    <div class="ml-2 flex items-center space-x-4 sm:ml-6 sm:space-x-6">
+                        <!-- Profile dropdown -->
+                        {% include 'partials/usermenu.html.twig' %}
+                        {#                        {% include 'partials/actions.html.twig' %}#}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <!-- Main content -->
+        <div class="flex flex-1 items-stretch overflow-hidden">
+
+
+            <main class="flex-1 overflow-y-auto">
+                <!-- Primary column -->
+
+                <section aria-labelledby="primary-heading" class="flex h-full min-w-0 flex-1 flex-col lg:order-last">
+
+                    <div>
+                        <div class="mx-auto">
+
+
+                            {% if block('breadcrumb') %}
+                                <div class="m-4 p-4">
+                                    {% block breadcrumb %}{% endblock %}
+                                </div>
+                            {% endif %}
+
+                            {% block body %}{% endblock %}
+
+
+                            {#                            {% block header_actions %}{% endblock %} #}
+                            <!-- /End replace -->
+                        </div>
+                    </div>
+
+                </section>
+            </main>
+
+        </div>
+    </div>
+</div>
+
+{% for message in app.flashes('success') %}
+    {% include 'partials/flash/success.html.twig' with {color:"green"} %}
+{% endfor %}
+
+
+{% for message in app.flashes('warning') %}
+    {% include 'partials/flash/warning.html.twig' with {color:"orange"} %}
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    {% include 'partials/flash/error.html.twig' with {color:"red"} %}
+{% endfor %}
+
+{% for message in app.flashes('info') %}
+    {% include 'partials/flash/info.html.twig' with {color:"blue"} %}
+{% endfor %}
+
+
+</body>
+</html>
