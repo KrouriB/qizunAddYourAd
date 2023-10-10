@@ -2,50 +2,53 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
-use Symfony\Component\Filesystem\Path;
+use App\Entity\Ad;
+use App\Controller\Admin\AdCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Asset\Package;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
-    public function __construct(private AdminUrlGenerator $urlGenerator)
-    {
-    }
-
     #[Route('/admin', name: 'admin')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(): Response
     {
-        return $this->redirect($this->urlGenerator->setController(UserCrudController::class)->generateUrl());
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        return $this->redirect($adminUrlGenerator->setController(AdCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
     {
-        $package = new Package(
-            new JsonManifestVersionStrategy(
-                Path::join($this->getParameter('kernel.project_dir'), "public/build/manifest.json")
-            )
-        );
-
-        $image = $package->getUrl("build/images/login_logo.png");
-        $favicon = $package->getUrl("build/images/favicon.png");
-
         return Dashboard::new()
-            ->renderContentMaximized()
-            ->setTitle('<img src="' . $image . '">')
-            ->setFaviconPath($favicon);
+            ->setTitle('AddYourAd');
     }
 
     public function configureMenuItems(): iterable
     {
-        //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');
+        yield MenuItem::linkToCrud('Ads', 'fa-solid fa-rectangle-ad', Ad::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-users', User::class);
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+    }
+
+    public function configureCrud(): Crud
+    {
+        return Crud::new()
+            ->overrideTemplates([
+                'crud/edit' => 'ad/index.html.twig',
+            ])
+        ;
+    }
+
+    #[Route('/', name: 'rediect_admin')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function redirectAdmin(): Response
+    {
+        return $this->redirectToRoute('admin');
     }
 }
