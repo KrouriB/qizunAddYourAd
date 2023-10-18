@@ -83,12 +83,22 @@ class Ad
     #[ORM\OneToMany(mappedBy: 'Ad', targetEntity: Log::class, orphanRemoval: true)]
     private Collection $logs;
 
+    #[ORM\ManyToOne(inversedBy: 'ads', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?GroupAd $groupAd = null;
+
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'ads', cascade: ['persist'])]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->views = 0;
         $this->totalViews = 0;
         $this->click = 0;
         $this->logs = new ArrayCollection();
+        $groupAd = new GroupAd();
+        $groupAd->addAd($this);
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -325,6 +335,43 @@ class Ad
             }
         }
 
+        return $this;
+    }
+
+    public function getGroupAd(): ?GroupAd
+    {
+        return $this->groupAd;
+    }
+
+    public function setGroupAd(?GroupAd $groupAd): static
+    {
+        $this->groupAd = $groupAd;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addAd($this);
+        }
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        if ($this->tags->removeElement($tag)) {
+            $tag->removeAd($this);
+        }
         return $this;
     }
 }
