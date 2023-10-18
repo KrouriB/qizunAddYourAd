@@ -26,6 +26,15 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\EventSubscriber\AdSubscriber:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    App\Form\CustomRelationshipField:
+        tags: ['form.type']
+
 #    App\Service\CsvImporter\CsvDeviceListImporter:
 #        arguments:
 #            $manager: "@doctrine.orm.entity_manager"
