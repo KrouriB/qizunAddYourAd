@@ -4,3 +4,12 @@ easy_admin:
             class: App\Entity\Ad
             edit:
                 templatePath: 'templates/ad/index.html.twig'
+            form:
+                fields:
+                    - 'name'
+                    - 'description'
+                    - 'custom_relationship'  # Use the custom field
+            custom_options:
+                custom_relationship:
+                    collection_field_name: 'tags'  # Collection field name
+                    target_entity: 'App\Entity\Tag'  # Target entity for the association
