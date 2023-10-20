@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Ad;
-use App\Form\AdType;
 use App\Form\TagType;
+use App\Repository\AdRepository;
 use App\Repository\TagRepository;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -40,8 +40,49 @@ class AdCrudController extends AbstractCrudController
             DateField::new('startedAt'),
             DateField::new('endedAt'),
             IntegerField::new('views')->setFormTypeOption('disabled', 'disabled'),
-            CollectionField::new('tags')
-            ->setFormType(AdType::class), // Use the custom AdType form type
+            // CollectionField::new('tags')
+            //     ->onlyOnForms()
+            //     ->setEntryIsComplex(true) // Indique que chaque entrée est complexe (Module + nombre de jours)
+            //     ->setFormTypeOptions(
+            //         [
+            //         'allow_add' => true, // Autoriser l'ajout de nouvelles entrées
+            //         'allow_delete' => true, // Autoriser la suppression d'entrées existantes
+            //         'by_reference' => false, // Nécessaire pour que les modifications soient persistées correctement
+            //         ]
+            //     )
+            //     ->setEntryType(TagType::class) // Le formulaire pour chaque entrée
+            //     ->setCustomOption('query_builder', function (TagRepository $tagRepository) {
+            //         return $tagRepository->createQueryBuilder('t')
+            //             ->orderBy('t.name', 'ASC');
+            //     })
+            AssociationField::new('tags')
+                ->setFormTypeOptions(
+                    [
+                    'by_reference' => false,
+                    ]
+                ),
         ];
+    }
+
+    
+
+    public function tagAds(
+        AdRepository $adRepository,
+        TagRepository $tagRepository,
+    )
+    {
+        $ad = $adRepository->find('id');
+        $notTagged = $tagRepository->findNotTagged('id');
+        $tagged = $tagRepository->findTagged('id');
+    }
+
+    public function setTagToAds( // potentiellement inutille
+        AdRepository $adRepository,
+        TagRepository $tagRepository,
+        EntityManagerInterface $entityManager
+    )
+    {
+        $ad = $adRepository->find('id');
+        
     }
 }

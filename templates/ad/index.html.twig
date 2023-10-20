@@ -59,6 +59,7 @@
 {% block main %}
     {% block edit_form %}
         {{ form(edit_form) }}
+            {# <!-- {{ render(controller('App\\Controller\\AdCrudController::tagAds',{ 'id': app.request.query.get('entityId') })) }} --> #}
     {% endblock edit_form %}
 
     {% block delete_form %}
