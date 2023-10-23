@@ -74,6 +74,10 @@ class AdCrudController extends AbstractCrudController
         $ad = $adRepository->find('id');
         $notTagged = $tagRepository->findNotTagged('id');
         $tagged = $tagRepository->findTagged('id');
+        return $this->render('ad/tag.html.twig', [
+            'tagged' => $tagged,
+            'notTagged' => $notTagged
+        ]);
     }
 
     public function setTagToAds( // potentiellement inutille
