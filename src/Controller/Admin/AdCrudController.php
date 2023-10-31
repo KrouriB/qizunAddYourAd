@@ -7,8 +7,11 @@ use App\Form\TagType;
 use App\Repository\AdRepository;
 use App\Repository\TagRepository;
 use Symfony\Component\HttpFoundation\Request;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -65,6 +68,22 @@ class AdCrudController extends AbstractCrudController
         ];
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        $duplicateAction = Action::new('duplicate')
+            ->setTemplatePath('ad/index.html.twig')
+            ->linkToCrudAction('duplicate')
+            ->addCssClass('btn btn-success')
+            ->setIcon('fa fa-check-circle')
+            ->displayAsButton();
+        return parent::configureActions($actions)
+            ->update(Crud::PAGE_INDEX, Action::DELETE, static function(Action $action) {
+                $action->displayIf(static function (Question $question) {
+                    return true;
+                });
+            })
+            ->add(Crud::PAGE_EDIT, $duplicateAction);
+    }
     
     #[Route('/admin/tag/select/{id}/', name: 'tag_select')]
     public function tagAds(

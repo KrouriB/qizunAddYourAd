@@ -21,11 +21,6 @@
         {{ include('@EasyAdmin/includes/_css_assets.html.twig', { assets: ea.assets.cssAssets ?? [] }, with_context = false) }}
         {{ include('@EasyAdmin/includes/_encore_link_tags.html.twig', { assets: ea.assets.webpackEncoreAssets ?? [] }, with_context = false) }}
     {% endblock %}
-
-    {% block head_favicon %}
-        <link rel="shortcut icon" href="{{ asset(ea.dashboardFaviconPath) }}">
-    {% endblock %}
-
     {% block head_javascript %}
         <script src="{{ asset('app.js', ea.assets.defaultAssetPackageName) }}"></script>
     {% endblock head_javascript %}
